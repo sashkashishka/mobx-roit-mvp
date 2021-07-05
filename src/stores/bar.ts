@@ -1,11 +1,7 @@
 import { action, observable, makeObservable } from 'mobx';
-import { iCommonStore } from './common';
 
 export class BarStore {
-  private common: iCommonStore;
-
-  constructor({ common }: { common: iCommonStore }) {
-    this.common = common;
+  constructor() {
     makeObservable(this, {
       count: observable,
       dec: action,
@@ -16,6 +12,5 @@ export class BarStore {
 
   dec(): void {
     this.count -= 1;
-    this.common.baz();
   }
 }

@@ -2,8 +2,9 @@ import * as React from 'react';
 
 import { StoreContext } from './context';
 
-export const inject = (...args: [Store: any, name: string, deps?: string[]][]) => (component: React.FC) => {
+type tInjectArgs = [Store: any, name: string, deps?: string[]] | string;
 
+export const inject = (...args: tInjectArgs[]) => (component: React.FC) => {
   class Inject extends React.Component {
     static contextType = StoreContext;
 
@@ -14,10 +15,23 @@ export const inject = (...args: [Store: any, name: string, deps?: string[]][]) =
     }
 
     componentDidMount() {
-      this.storesCancellation = args.map(([Store, name, deps]) => this.context.register(Store, name, deps));
+      this.storesCancellation = args
+        .filter((arg) => Array.isArray(arg))
+        .map(([Store, name, deps]) => this.context.register(Store, name, deps));
 
-      const stores = args.reduce((acc, [Store, name]) => {
-        acc[name] = this.context[name];
+      const stores = args.reduce((acc, curr) => {
+        let name = '';
+
+        if (Array.isArray(curr)) {
+          name = curr[1];
+        }
+
+        if (typeof curr === 'string') {
+          name = curr;
+        }
+
+
+        acc[name] = this.context.get(name);
         return acc;
       }, {});
 
@@ -25,7 +39,6 @@ export const inject = (...args: [Store: any, name: string, deps?: string[]][]) =
     }
 
     componentWillUnmount() {
-
       this.storesCancellation.map(fn => fn());
     }
 

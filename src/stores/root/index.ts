@@ -2,10 +2,11 @@ import { proxyHandlers } from './proxy';
 
 export interface iRS {
   register(Store: any, name: string, deps?: string[]): () => void
+  get<T>(name: string): T;
   [key: string]: any;
 }
 
-class RS {
+class RootStore {
   register(Store: any, name: string, deps: string[] = []) {
     const root = this;
 
@@ -29,6 +30,17 @@ class RS {
       delete this[name];
     };
   }
+
+  get(name: string) {
+    if (name in this) {
+      return this[name];
+    }
+
+    throw new Error(`
+      There is no store with name "${name}".
+      Please register store in RootStore or check for typo.
+    `);
+  }
 }
 
-export const rootStore = new Proxy<iRS>(new RS(), proxyHandlers);
+export const rootStore = new RootStore();
