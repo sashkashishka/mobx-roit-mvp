@@ -56,8 +56,6 @@
     "jest": "^27.0.4",
     "node-sass": "^6.0.0",
     "prettier": "^2.3.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0",
     "rimraf": "^3.0.2",
     "sass-loader": "^12.0.0",
@@ -68,5 +66,11 @@
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "mobx": "^6.3.2",
+    "mobx-react": "^7.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0"
+  }
 }
